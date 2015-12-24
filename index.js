@@ -29,6 +29,9 @@ const http      = require('http');
 const server    = http.createServer(function (request, response) {
     response.writeHead(200, {"Content-Type": "text/plain"});
     let ip    = requestIp.getClientIp(request);
+    if (ip) {
+        ip = ip.replace("::ffff:", ""); // Strip out IPv6ifiaction
+    }
     // inspect("IP address: ", ip);
     let loc   = geoip.lookup(ip);
     // inspect("Geo location: ", loc);
