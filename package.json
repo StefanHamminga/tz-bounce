@@ -1,6 +1,6 @@
 {
   "name": "tz-bounce",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Tiny webserver replying your current best guess timezone, based on your public IP and GeoIP databases",
   "main": "index.js",
   "scripts": {

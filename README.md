@@ -5,8 +5,6 @@ Node.js based timezone bounce server. Uses the public IP to reply a matched loca
 
 ```bash
 cd mysites
-npm install tz-bounce
- -or-
 git clone https://github.com/StefanHamminga/tz-bounce.git
 cd tz-bounce
 npm install
