@@ -22,24 +22,37 @@ const geoip     = require('geoip-lite');
 const tzlookup  = require("tz-lookup");
 const http      = require('http');
 
-// const util      = require('util');
+const util      = require('util');
 // const inspect   = function(desc, item) { if (!(item)) {item = desc; desc = "";} console.log(desc, util.inspect(item, {colors: true}))};
 
-// Configure our HTTP server to respond with Hello World to all requests.
+// Simple runtime / time to live caching
+const ttl       = 24 * 60 * 60 * 1000; // ms
+const cache     = {};
+
 const server    = http.createServer(function (request, response) {
     response.writeHead(200, {"Content-Type": "text/plain"});
-    let ip    = requestIp.getClientIp(request);
+    let ip = requestIp.getClientIp(request);
     if (ip) {
-        ip = ip.replace("::ffff:", ""); // Strip out IPv6ifiaction
+        ip = ip.replace("::ffff:", ""); // Strip out IPv6ification
     }
     // inspect("IP address: ", ip);
-    let loc   = geoip.lookup(ip);
-    // inspect("Geo location: ", loc);
+
+    let loc;
     let tz;
-    if (loc && loc.ll) {
-        tz = tzlookup(loc.ll[0], loc.ll[1]);
+    if (cache[ip] && cache[ip].maxage > new Date()) {
+        loc = cache[ip].loc;
+        tz = cache[ip].tz;
+    } else {
+        loc = geoip.lookup(ip);
+        // inspect("Geo location: ", loc);
+        if (loc && loc.ll) {
+            tz = tzlookup(loc.ll[0], loc.ll[1]);
+            if (tz) {
+                cache[ip] = { ip: ip, loc: loc, tz: tz, maxage: new Date() + ttl };
+            }
+        }
+        // inspect("Timezone ", tz);
     }
-    // inspect("Timezone ", tz);
     response.end("Api: " + api_name + "\n" +
                  "PublicIP: " + (ip || "null") + "\n" +
                  "Timezone: " + (tz || "null") + "\n" +
@@ -50,6 +63,7 @@ const server    = http.createServer(function (request, response) {
                  "\tMetro: " + (loc.metro || "null") + "\n" +
                  "\tLatitude: " + (loc.ll[0] || "null") + "\n" +
                  "\tLongitude: " + (loc.ll[1] || "null") + "\n") : "null\n"));
+    console.log(util.inspect(cache, {colors: true}));
 });
 
 server.listen(port);
