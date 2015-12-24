@@ -6,22 +6,36 @@ Node.js based timezone bounce server. Uses the public IP to reply a matched loca
 ```bash
 cd mysites
 npm install tz-bounce
-```
-
-or
-
-```bash
-cd mysites
+ -or-
 git clone https://github.com/StefanHamminga/tz-bounce.git
+cd tz-bounce
+npm install
 ```
 
-## Usage
+## Client usage
 
 ```bash
-curl https://url
+curl https://prjct.net/tzbounce
 ```
 
-will reply a [YAML](https://en.wikipedia.org/wiki/YAML) formatted message containing matched information.
+replies a [YAML](https://en.wikipedia.org/wiki/YAML) formatted message containing matched information:
+
+```yaml
+Api: tz-bounce yaml v1.0.0
+PublicIP: 14.200.66.162
+Timezone: Australia/Sydney
+Location:
+        Country: AU
+        Region: 02
+        City: Bondi
+        Metro: null
+        Latitude: -33.8939
+        Longitude: 151.2498
+```
+
+## Automatic timezone selection using NetworkManager
+
+The `client.sh` tool in the repository can be placed in `/etc/NetworkManager/dispatcher.d/` to update the timezone upon connecting to a network.
 
 ## License & repository
 
