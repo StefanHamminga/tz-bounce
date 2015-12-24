@@ -22,7 +22,7 @@ const geoip     = require('geoip-lite');
 const tzlookup  = require("tz-lookup");
 const http      = require('http');
 
-const util      = require('util');
+// const util      = require('util');
 // const inspect   = function(desc, item) { if (!(item)) {item = desc; desc = "";} console.log(desc, util.inspect(item, {colors: true}))};
 
 // Simple runtime / time to live caching
@@ -63,7 +63,6 @@ const server    = http.createServer(function (request, response) {
                  "\tMetro: " + (loc.metro || "null") + "\n" +
                  "\tLatitude: " + (loc.ll[0] || "null") + "\n" +
                  "\tLongitude: " + (loc.ll[1] || "null") + "\n") : "null\n"));
-    console.log(util.inspect(cache, {colors: true}));
 });
 
 server.listen(port);
