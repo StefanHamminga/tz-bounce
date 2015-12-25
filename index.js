@@ -17,6 +17,7 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 "use strict";
 const api_name  = 'tz-bounce yaml v1.0.0';
 const port      = process.env.TZBOUNCEPORT || process.argv[2] || 8000;
+const ind       = "    ";
 const requestIp = require('request-ip');
 const geoip     = require('geoip-lite');
 const tzlookup  = require("tz-lookup");
@@ -57,12 +58,12 @@ const server    = http.createServer(function (request, response) {
                  "PublicIP: " + (ip || "null") + "\n" +
                  "Timezone: " + (tz || "null") + "\n" +
                  "Location: " + ((loc) ?
-                     ("\n\tCountry: " + (loc.country || "null") + "\n" +
-                 "\tRegion: " + (loc.region || "null") + "\n" +
-                 "\tCity: " + (loc.city || "null") + "\n" +
-                 "\tMetro: " + (loc.metro || "null") + "\n" +
-                 "\tLatitude: " + (loc.ll[0] || "null") + "\n" +
-                 "\tLongitude: " + (loc.ll[1] || "null") + "\n") : "null\n"));
+                     ("\n" + ind + "Country: " + (loc.country || "null") + "\n" +
+                     ind + "Region: " + (loc.region || "null") + "\n" +
+                     ind + "City: " + (loc.city || "null") + "\n" +
+                     ind + "Metro: " + (loc.metro || "null") + "\n" +
+                     ind + "Latitude: " + (loc.ll[0] || "null") + "\n" +
+                     ind + "Longitude: " + (loc.ll[1] || "null") + "\n") : "null\n"));
 });
 
 server.listen(port);
